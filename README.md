@@ -54,6 +54,8 @@ Ensure to power the sensor, motor, and fan as required.
 3. **Fan Activation**: The exhaust fan is turned on to ventilate the area.
 4. **Buzzer Beeping**: The buzzer beeps every 1 second for 5 seconds and then shuts off after a total duration of 15 seconds.
 5. **Gas Normalization**: If gas levels return to normal (below the threshold), the system reopens the valve (servo back to 90°), turns off the fan, and resets.
+![Block_diagram](https://github.com/user-attachments/assets/21b57379-ccd1-45a1-b0cf-be888b3091ee)
+
 
 ## Installation
 1. Clone or download the project from this repository.

@@ -13,7 +13,7 @@ Adafruit_SH1106G display = Adafruit_SH1106G(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, 
 
 const int gasSensorPin = A0;  
 const int buzzerPin = 8;
-const int fanPin = 10;  
+const int fanPin = 10;
 Servo gasValveServo;
 
 const int gasThreshold = 600; // Gas threshold for detection
@@ -36,7 +36,7 @@ void setup() {
   // Initialize OLED display
   display.begin(i2c_Address, true); 
   display.display(); 
-  delay(2000)
+  delay(2000);
   display.clearDisplay();
 
   // Print the initial message on the OLED
@@ -54,21 +54,21 @@ void loop() {
 
   Serial.print("Gas Level: ");
   Serial.println(gasLevel);
-
-  // Display gas level on OLED
-  display.clearDisplay();
-  display.setTextSize(2);
-  display.setTextColor(SH110X_WHITE);  
-  display.setCursor(0, 0);     
-  display.print("Gas Level: ");
-  display.setCursor(0, 30);     
-  display.println(gasLevel);
-  display.display();
+  
 
   // If gas leakage is detected
   if (gasLevel > gasThreshold && !servoMoved) {
     digitalWrite(fanPin, HIGH);
     gasValveServo.write(135);  // Close the gas valve
+
+    display.clearDisplay();
+    display.setTextSize(1);
+    display.setTextColor(SH110X_WHITE);  
+    display.setCursor(0, 0);
+    display.println("Gas leak");
+    display.setCursor(0, 30);
+    display.println("Detected!");
+    display.display();
 
     if (!buzzerActive) {
       buzzerActive = true;
@@ -92,6 +92,17 @@ void loop() {
     }
   } else {
     // No gas detected scenario
+
+    // Display gas level on OLED
+  display.clearDisplay();
+  display.setTextSize(1);
+  display.setTextColor(SH110X_WHITE);  
+  display.setCursor(0, 0);     
+  display.print("Gas Level: ");
+  display.setCursor(0, 30);     
+  display.println(gasLevel);
+  display.display();
+
     if (servoMoved) {
       digitalWrite(fanPin, LOW);
       gasValveServo.write(0);  // Open the gas valve

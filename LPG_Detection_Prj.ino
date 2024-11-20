@@ -6,12 +6,11 @@
 
 // OLED display setup
 #define i2c_Address 0x3c // I2C address of the OLED
-#define SCREEN_WIDTH 128 // OLED display width, in pixels
-#define SCREEN_HEIGHT 64 // OLED display height, in pixels
-#define OLED_RESET -1 // Reset pin not used
+#define SCREEN_WIDTH 128
+#define SCREEN_HEIGHT 64
+#define OLED_RESET -1
 Adafruit_SH1106G display = Adafruit_SH1106G(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
-// Gas sensor and control pin setup
 const int gasSensorPin = A0;  
 const int buzzerPin = 8;
 const int fanPin = 10;  
@@ -19,29 +18,25 @@ Servo gasValveServo;
 
 const int gasThreshold = 600; // Gas threshold for detection
 
-// Variables for gas detection
 bool servoMoved = false; 
 unsigned long buzzerStartTime = 0;
 const unsigned long buzzerDuration = 8000;
 bool buzzerActive = false; 
 
 void setup() {
-  // Initialize serial monitor
   Serial.begin(9600);
 
-  // Initialize pins
   pinMode(gasSensorPin, INPUT);
   pinMode(buzzerPin, OUTPUT);
   pinMode(fanPin, OUTPUT);
-  
-  // Initialize gas valve servo
+
   gasValveServo.attach(9);
-  gasValveServo.write(0);  // Gas valve is open initially
+  gasValveServo.write(0);
 
   // Initialize OLED display
   display.begin(i2c_Address, true); 
   display.display(); 
-  delay(2000);  // Wait for OLED to initialize
+  delay(2000)
   display.clearDisplay();
 
   // Print the initial message on the OLED
@@ -55,22 +50,20 @@ void setup() {
 }
 
 void loop() {
-  // Read the gas sensor value
   int gasLevel = analogRead(gasSensorPin);
-  
-  // Print gas level to serial monitor
+
   Serial.print("Gas Level: ");
   Serial.println(gasLevel);
 
   // Display gas level on OLED
   display.clearDisplay();
-  display.setTextSize(2);       // Larger text size for readability
+  display.setTextSize(2);
   display.setTextColor(SH110X_WHITE);  
   display.setCursor(0, 0);     
   display.print("Gas Level: ");
   display.setCursor(0, 30);     
-  display.println(gasLevel);   // Print the gas level on OLED
-  display.display();           // Update the OLED display
+  display.println(gasLevel);
+  display.display();
 
   // If gas leakage is detected
   if (gasLevel > gasThreshold && !servoMoved) {
@@ -107,6 +100,5 @@ void loop() {
     }
   }
 
-  // Delay before next reading
   delay(1000);
 }

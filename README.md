@@ -1,8 +1,7 @@
 # Gas Leakage Detection and Control System
 This project is an automated gas leakage detection and control system using an MQ-5 gas sensor, a servo motor to control the gas valve, a fan for ventilation, and a buzzer for audible alerts. The system monitors gas levels and reacts to ensure safety by closing the gas valve, turning on an exhaust fan, and beeping the buzzer when gas is detected.
 
-![Project](https://github.com/user-attachments/assets/67382ce2-d27e-4be1-8fdc-39e50e0e19ac)
-
+![Prototype](https://github.com/user-attachments/assets/d046fe97-00c4-4349-8852-507f2d135e6c)
 
 ## Table of Contents
 - [Features](#features)
@@ -29,6 +28,7 @@ This project is an automated gas leakage detection and control system using an M
 - **Buzzer**
 - **Exhaust Fan** (controlled via MOSFET)
 - **Jumper wires**
+- **OLED display**
 - **Breadboard** (optional)
 
 ## Circuit Diagram
@@ -37,6 +37,7 @@ Here is the circuit configuration for the project:
 - **Servo Motor**: Connect the signal wire to pin `9` on the Arduino.
 - **Buzzer**: Connect the positive leg to pin `8` on the Arduino.
 - **Fan**: Connect the control wire via MOSFET to pin `10` on the Arduino.
+- **OLED**: Connect the SCK pin to pin `A5` and SDA pin to `A4` on the Arduino.
 
 Ensure to power the sensor, motor, and fan as required.
 
@@ -47,19 +48,22 @@ Ensure to power the sensor, motor, and fan as required.
 | Servo Motor    | 9    | Controls gas valve              |
 | Buzzer         | 8    | Provides an audible alert       |
 | Fan            | 10   | Activates fan for ventilation   |
+| SDA (OLED)     | A4   | Data pin for OLED               |
+| SCK (OLED)     | A5   | Clock pin for OLED              |
 
 ## How It Works
 1. **Gas Detection**: The MQ-5 sensor reads the gas concentration level. If the concentration exceeds a certain threshold (default: 600), it triggers the system.
-2. **Servo Activation**: The servo motor closes the gas valve (set to 0°) to stop gas flow.
-3. **Fan Activation**: The exhaust fan is turned on to ventilate the area.
-4. **Buzzer Beeping**: The buzzer beeps every 1 second for 5 seconds and then shuts off after a total duration of 15 seconds.
-5. **Gas Normalization**: If gas levels return to normal (below the threshold), the system reopens the valve (servo back to 90°), turns off the fan, and resets.
-![Block_diagram](https://github.com/user-attachments/assets/21b57379-ccd1-45a1-b0cf-be888b3091ee)
+2. **PPM display**: The OLED display continuously displays the ppm level of concentration of gas.
+3. **Servo Activation**: The servo motor closes the gas valve (set to 0°) to stop gas flow.
+4. **Fan Activation**: The exhaust fan is turned on to ventilate the area.
+5. **Buzzer Beeping**: The buzzer beeps every 1 second for 5 seconds and then shuts off after a total duration of 15 seconds.
+6. **Gas Normalization**: If gas levels return to normal (below the threshold), the system reopens the valve (servo back to 90°), turns off the fan, and resets.
+![Block diagram](https://github.com/user-attachments/assets/5db48c8a-1653-4d3d-adbb-c1285f44eb0d)
 
 
 ## Installation
 1. Clone or download the project from this repository.
-2. Install the **Servo** library if not already installed. You can do this in the Arduino IDE by navigating to `Sketch > Include Library > Manage Libraries` and searching for "Servo".
+2. Install the required libraries if not already installed. You can do this in the Arduino IDE by navigating to `Sketch > Include Library > Manage Libraries` and searching for all the libraries.
 3. Connect the components as per the circuit diagram.
 
 ## Usage
@@ -67,8 +71,9 @@ Ensure to power the sensor, motor, and fan as required.
 2. Power the system and open the Serial Monitor to see gas level readings and system actions.
 3. Once the system detects gas levels above the threshold, it will automatically:
    - Close the gas valve.
+   - Display the "Gas leak detected" text on the OLED.
    - Start the exhaust fan.
-   - Beep the buzzer every second for 5 seconds and turn it off after a total of 15 seconds.
+   - Beep the buzzer every second for 1 second and turn it off after a total of 8 seconds.
    - Once gas levels normalize, the gas valve will reopen, and the fan will turn off.
 
 ## Future Scope
